@@ -6,14 +6,12 @@ from optparse import OptionParser
 from HTMLParser import HTMLParser
 import ssl
 
-BASE_URL="https://maninwire.mooo.com/pcfindDjango"
-#BASE_URL="http://127.0.0.1:8000"
 PATH_TO_LOGIN="/login/"
 
 
 #LOG_FILE="c:/temp/log1.txt"
 class Sender(object):
-    def __init__(self):
+    def __init__(self,url):
         #para que no verifique el certificado
         self.context=ssl.create_default_context()
         self.context.check_hostname=False
@@ -30,11 +28,11 @@ class Sender(object):
         self.sessionid=None
         self.cookies=[]
         self.options=None
-
+        self.baseUrl=url
 
     def initForm(self,url):
         #basically to get the coresponding csrftoken for the post
-        url=BASE_URL+"/"+url+"/"
+        url=self.baseUrl+"/"+url+"/"
         print url
         page = self.opener.open( url )
 
@@ -49,7 +47,7 @@ class Sender(object):
             raise IOError( "No csrf cookie found" )
     
     def search(self,query,filter):
-        url=BASE_URL+"/search_line/"
+        url=self.baseUrl+"/search_line/"
 
         params = {'myquery':query,'myfilter':filter,'csrfmiddlewaretoken': self.csrf_cookie.value,'sessionid':self.sessionid.value}
         #params = {'myquery':query,'myfilter':filter,'csrfmiddlewaretoken': self.csrf_cookie.value}
@@ -69,7 +67,7 @@ class Sender(object):
         #return salida
 
     def searchDeleteLine(self,myquery,myfilter):
-        url=BASE_URL+"/search_delete_line/"
+        url=self.baseUrl+"/search_delete_line/"
 
         params = {'myquery':myquery,'myfilter':myfilter,'csrfmiddlewaretoken': self.csrf_cookie.value,'sessionid':self.sessionid.value}
         #params = {'myquery':query,'myfilter':filter,'csrfmiddlewaretoken': self.csrf_cookie.value}
@@ -89,7 +87,7 @@ class Sender(object):
         #return salida
 
     def addLine(self,texto):
-        url=BASE_URL+"/add_line/"
+        url=self.baseUrl+"/add_line/"
 
         params = {'text':texto,'csrfmiddlewaretoken': self.csrf_cookie.value,'sessionid':self.sessionid.value}
         #params = {'myquery':query,'myfilter':filter,'csrfmiddlewaretoken': self.csrf_cookie.value}
@@ -112,7 +110,7 @@ class Sender(object):
 
 
     def login( self, username=None, password=None ):
-        url=BASE_URL+"/login/"
+        url=self.baseUrl+"/login/"
         # prompt for the username (if needed), password
         if username == None:
             username = getpass.getpass( 'Username: ' )
@@ -187,14 +185,16 @@ if __name__ == '__main__':
     parser.add_option("-f", "--filter", default="",help="text to exclude")
     parser.add_option("-a", "--add", help="add line to database")
     parser.add_option("-d", "--delete", help="add line to database")
+    parser.add_option("-u", "--url", help="url")
 
     
 
 
 
     (options, args) = parser.parse_args()
+    if not options.url:print "url is needed.";exit(1)
     if not sum([bool(options.query),bool(options.add),bool(options.delete)])==1: print "You have to select only one of -q, -a , -d"; exit(1)
-    s=Sender()
+    s=Sender(options.url)
     s.login()
     if options.query:
         s.initForm("search_line")
