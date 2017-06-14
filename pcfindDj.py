@@ -33,7 +33,6 @@ class Sender(object):
     def initForm(self,url):
         #basically to get the coresponding csrftoken for the post
         url=self.baseUrl+"/"+url+"/"
-        print url
         page = self.opener.open( url )
 
         # attempt to get the csrf token from the cookie jar
@@ -193,6 +192,10 @@ if __name__ == '__main__':
 
 
     (options, args) = parser.parse_args()
+    #override url parameter
+    options.url=""
+    #override login parameter
+    options.login=""
     if not options.url:print "url is needed.";exit(1)
     if not sum([bool(options.query),bool(options.add),bool(options.delete)])==1: print "You have to select only one of -q, -a , -d"; exit(1)
     s=Sender(options.url)
