@@ -186,6 +186,7 @@ if __name__ == '__main__':
     parser.add_option("-a", "--add", help="add line to database")
     parser.add_option("-d", "--delete", help="add line to database")
     parser.add_option("-u", "--url", help="url")
+    parser.add_option("-l", "--login", help="login")
 
     
 
@@ -195,7 +196,7 @@ if __name__ == '__main__':
     if not options.url:print "url is needed.";exit(1)
     if not sum([bool(options.query),bool(options.add),bool(options.delete)])==1: print "You have to select only one of -q, -a , -d"; exit(1)
     s=Sender(options.url)
-    s.login()
+    s.login(options.login)
     if options.query:
         s.initForm("search_line")
         print s.search(options.query,options.filter)
