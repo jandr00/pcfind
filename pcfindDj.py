@@ -1,12 +1,11 @@
-#import logging
-
 import getpass
 import urllib,urllib2
 from optparse import OptionParser
 from HTMLParser import HTMLParser
 import ssl
+from sys import argv
 
-PATH_TO_LOGIN="/login/"
+PATH_TO_LOGIN="/accounts/login/"
 
 
 #LOG_FILE="c:/temp/log1.txt"
@@ -109,7 +108,7 @@ class Sender(object):
 
 
     def login( self, username=None, password=None ):
-        url=self.baseUrl+"/login/"
+        url=self.baseUrl+PATH_TO_LOGIN
         # prompt for the username (if needed), password
         if username == None:
             username = getpass.getpass( 'Username: ' )
@@ -189,7 +188,7 @@ if __name__ == '__main__':
 
     
 
-
+    if len(argv)==1:print "use -h for help";exit(1)
 
     (options, args) = parser.parse_args()
     #override url parameter
@@ -214,5 +213,4 @@ if __name__ == '__main__':
         exit(0)      
         
     
-
 
