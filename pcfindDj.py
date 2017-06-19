@@ -96,6 +96,8 @@ class Sender(object):
         except:
             salida="Something went wrong."
 
+        return salida
+
     def addLine(self,texto):
         url=self.baseUrl+"/add_line/"
 
