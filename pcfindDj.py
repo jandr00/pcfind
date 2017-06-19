@@ -84,6 +84,18 @@ class Sender(object):
         #salida=json.load(salida)
         #return salida
 
+
+
+    def addLines(self,myfile):
+        try:
+	    f=open(myfile,"r")
+	    for line in f.readlines():
+	        self.addLine(line)
+	    f.close()
+            salida="Lines inserted successfully."
+        except:
+            salida="Something went wrong."
+
     def addLine(self,texto):
         url=self.baseUrl+"/add_line/"
 
@@ -110,11 +122,13 @@ class Sender(object):
     def login( self, username=None, password=None ):
         url=self.baseUrl+PATH_TO_LOGIN
         # prompt for the username (if needed), password
-        if username == None:
-            username = getpass.getpass( 'Username: ' )
-        if password == None:
-            password = getpass.getpass( 'Password: ' )
+        try:
+            if username == None:
+             username = getpass.getpass( 'Username: ' )
+            if password == None:
+             password = getpass.getpass( 'Password: ' )
 
+        except:exit(1)
         login_page = self.opener.open( url )
 
         # attempt to get the csrf token from the cookie jar
@@ -182,7 +196,8 @@ if __name__ == '__main__':
 #     parser.add_option("-q", "--askName", action='store_true', default=False,help="option for flags")
     parser.add_option("-f", "--filter", default="",help="text to exclude")
     parser.add_option("-a", "--add", help="add line to database")
-    parser.add_option("-d", "--delete", help="add line to database")
+    parser.add_option("-p", "--processFile", help="process file to add lines to database")
+    parser.add_option("-d", "--delete", help="delete line from database. Searches for text and deletes line. Can use -f")
     parser.add_option("-u", "--url", help="url")
     parser.add_option("-l", "--login", help="login")
 
@@ -195,9 +210,9 @@ if __name__ == '__main__':
     #options.url=""
     #override login parameter
     #options.login=""
-    if sum([bool(options.query),bool(options.add),bool(options.delete)])==0: print "Use -h for help"; exit(1)
+    if sum([bool(options.query),bool(options.add),bool(options.processFile),bool(options.delete)])==0: print "Use -h for help"; exit(1)
     if not options.url:print "url is needed.";exit(1)
-    if not sum([bool(options.query),bool(options.add),bool(options.delete)])==1: print "You have to select only one of -q, -a , -d"; exit(1)
+    if not sum([bool(options.query),bool(options.add),bool(options.processFile),bool(options.delete)])==1: print "You have to select only one of -q, -a , -d -p"; exit(1)
     s=Sender(options.url)
     s.login(options.login)
     if options.query:
@@ -207,6 +222,10 @@ if __name__ == '__main__':
     if options.add:
         s.initForm("add_line")
         print s.addLine(options.add)
+        exit(0)
+    if options.processFile:
+        s.initForm("add_line")
+        print s.addLines(options.processFile)
         exit(0)
     if options.delete:
         s.initForm("search_delete_line")
