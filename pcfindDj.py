@@ -3,7 +3,7 @@ import urllib,urllib2
 from optparse import OptionParser
 from HTMLParser import HTMLParser
 import ssl
-from sys import argv
+from sys import exit
 
 PATH_TO_LOGIN="/accounts/login/"
 
