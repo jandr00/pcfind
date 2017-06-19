@@ -188,13 +188,14 @@ if __name__ == '__main__':
 
     
 
-    if len(argv)==1:print "use -h for help";exit(1)
+    
 
     (options, args) = parser.parse_args()
     #override url parameter
-    options.url=""
+    #options.url=""
     #override login parameter
-    options.login=""
+    #options.login=""
+    if sum([bool(options.query),bool(options.add),bool(options.delete)])==0: print "Use -h for help"; exit(1)
     if not options.url:print "url is needed.";exit(1)
     if not sum([bool(options.query),bool(options.add),bool(options.delete)])==1: print "You have to select only one of -q, -a , -d"; exit(1)
     s=Sender(options.url)
