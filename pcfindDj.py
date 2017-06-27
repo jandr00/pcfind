@@ -5,7 +5,7 @@ from HTMLParser import HTMLParser
 import ssl
 from sys import exit
 
-PATH_TO_LOGIN="/accounts/login/"
+PATH_TO_LOGIN="/login/"
 
 
 #LOG_FILE="c:/temp/log1.txt"
@@ -123,6 +123,7 @@ class Sender(object):
 
     def login( self, username=None, password=None ):
         url=self.baseUrl+PATH_TO_LOGIN
+
         # prompt for the username (if needed), password
         try:
             if username == None:
