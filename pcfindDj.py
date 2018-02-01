@@ -1,3 +1,4 @@
+#!/usr/bin/python2
 import getpass
 import urllib,urllib2
 from optparse import OptionParser
@@ -6,7 +7,9 @@ import ssl
 from sys import exit
 
 PATH_TO_LOGIN="/login/"
-
+#PATH_TO_LOGIN="login/?next=/pcfind/"
+#PATH_TO_LOGIN="/"
+LOGIN_REDIR="?next=/pcfind/"
 
 #LOG_FILE="c:/temp/log1.txt"
 class Sender(object):
@@ -154,7 +157,7 @@ class Sender(object):
 
         ) )
         #self.log.debug( "login_data: %s" % login_data )
-
+        url+=LOGIN_REDIR
         req = urllib2.Request( url, login_data )
         req.add_header( 'Referer', url )
         req.add_header('User-Agent',"Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)")
